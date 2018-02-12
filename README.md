@@ -12,4 +12,16 @@ npm install firebase angularfire2 --save
 ng g module material --flat
 
 ## Code scaffolding
+<!-- Product module setup -->
+ng g module product
+ng g class product/fooditem
+ng g component product/fooditem-list
+ng g component product/fooditem-detail
+ng g component product/fooditem-new
+ng g component product/fooditem-modify
+ng g service product/fooditem -m product
+
+<!-- Core module setup -->
+ng g module core
+
 
