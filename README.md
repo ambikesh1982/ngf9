@@ -12,7 +12,8 @@ ng new ngf9 --routing --style scss
 - ng g module material --flat
 
 ## Code scaffolding
-###<!-- Product module setup -->
+
+### Product module setup
 - ng g module product
 - ng g class product/fooditem
 - ng g component product/fooditem-list
@@ -21,7 +22,7 @@ ng new ngf9 --routing --style scss
 - ng g component product/fooditem-modify
 - ng g service product/fooditem -m product
 
-###<!-- Core module setup -->
+### Core module setup
 - ng g module core
 - ng g service core/auth -m core
 - ng g guard core/auth -m core
