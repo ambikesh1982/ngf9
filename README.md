@@ -23,5 +23,8 @@ ng g service product/fooditem -m product
 
 <!-- Core module setup -->
 ng g module core
+ng g service core/auth -m core
+ng g guard core/auth -m core
+
 
 
