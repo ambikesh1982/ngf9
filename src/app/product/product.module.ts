@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FooditemListComponent } from './fooditem-list/fooditem-list.component';
@@ -20,7 +21,9 @@ const productRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     MaterialModule,
+    ReactiveFormsModule,
     RouterModule.forChild(productRoutes)
   ],
   declarations: [

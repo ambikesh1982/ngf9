@@ -1,3 +1,18 @@
+export class MiniUser {
+  userId: string;
+  userName: string;
+}
+
+export class GeoLocation {
+  lat: string;
+  lng: string;
+}
+
+export class Feedback {
+  comments: number;
+  likes: number;
+}
+
 export class Fooditem {
          title: string;
          description: string;
@@ -9,7 +24,7 @@ export class Fooditem {
          cuisine: string;
          imageUrl: string;
          addedAt: Date;
-         addedBy?: {userId: string, userName: string};
-         location?: {lat: string, lng: string};
-         feedback?: {comments: number, likes: number};
+         addedBy?: MiniUser;
+         location?: GeoLocation;
+         feedback?: Feedback;
        }
