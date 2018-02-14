@@ -1,5 +1,10 @@
-<form class="product-form">
+<mat-card>
+<form class="product-form" [formGroup]="productForm">
 <mat-form-field class="product-full-width">
-  <input matInput type="text" placeholder="Title">
+  <input matInput type="text" placeholder="Title" formControlName="title">
+</mat-form-field>
+<mat-form-field class="product-full-width">
+<input matInput type="textarea" placeholder="Describe your food item here" formControlName="description">
 </mat-form-field>
 </form>
+</mat-card>
