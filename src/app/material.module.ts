@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule,
+  MatChipsModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -12,6 +13,7 @@ import {
   MatSidenavModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
   MatStepperModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -21,6 +23,7 @@ import {
     // CommonModule
     MatButtonModule,
     MatCardModule,
+    MatChipsModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,
@@ -30,6 +33,7 @@ import {
     MatSidenavModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatStepperModule,
     MatToolbarModule,
   ],

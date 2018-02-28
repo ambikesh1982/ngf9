@@ -1,10 +1,31 @@
-<mat-card>
-<form class="product-form" [formGroup]="productForm">
-<mat-form-field class="product-full-width">
-  <input matInput type="text" placeholder="Title" formControlName="title">
-</mat-form-field>
-<mat-form-field class="product-full-width">
-<input matInput type="textarea" placeholder="Describe your food item here" formControlName="description">
-</mat-form-field>
-</form>
-</mat-card>
+<div *ngIf="(product.currentDocumentID$ | async); 
+    then itemCreated 
+    else itemNotCreated">
+</div>
+
+<!-- <div *ngIf="(product.currentDocumentID$ | async); 
+    then itemNotCreated
+    else itemCreated">
+</div> -->
+
+<ng-template #itemNotCreated>
+  <mat-spinner></mat-spinner>
+</ng-template>
+
+<ng-template #itemCreated>
+
+  <mat-vertical-stepper *ngIf="(product.productData$ | async) as item" style="width: 400px" linear="true">
+
+    <mat-step label="Upload Photos">
+      <app-file-upload [images]="item.images"></app-file-upload>
+    </mat-step>
+
+  </mat-vertical-stepper>
+
+  <div *ngIf="(product.snapshot$ | async) as snap">
+    {{ snap.bytesTransferred }} of {{ snap.totalBytes }}
+</div>
+
+ 
+
+</ng-template>

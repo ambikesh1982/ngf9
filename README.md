@@ -27,5 +27,10 @@ ng new ngf9 --routing --style scss
 - ng g service core/auth -m core
 - ng g guard core/auth -m core
 
+2084/47016/29966
+12/02/2018 15:20:57
+
+storage.ref('path/goes/here.jpg')getDownloadUrl()
+
 
 

@@ -1,0 +1,24 @@
+
+<div>
+  <img *ngIf="imagePreviewURL" mat-card-image [src]="imagePreviewURL" alt="no_image" style="border-radius: 10px 10px 0 0; height: 200px">
+  <!-- <button mat-icon-button>delete</button> -->
+
+  <mat-grid-list cols="4" rowHeight="1:1">
+    <mat-grid-tile *ngFor="let img of images">
+      <img mat-card-image [src]="img" alt="" style="max-height: 100%; max-width: 100%" (click)="showPreview(img)">
+    </mat-grid-tile>
+  </mat-grid-list>
+  <button mat-raised-button 
+    color="accent" 
+    style="float:initial; width:100%" 
+    (click)="chooseFile.click()"
+    [disabled]="selectedFileIndex < maxFileUploadCount ? false: true ">
+    Add your photos! ( Max 4 )
+  </button>
+  <input 
+    #chooseFile 
+    style="display:none;" 
+    type="file" 
+    accept="image/*,capture=camera" 
+    (change)="selectedFiles($event.target.files)">
+</div>

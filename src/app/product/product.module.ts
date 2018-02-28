@@ -2,13 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FooditemListComponent } from './fooditem-list/fooditem-list.component';
 import { FooditemDetailComponent } from './fooditem-detail/fooditem-detail.component';
 import { FooditemNewComponent } from './fooditem-new/fooditem-new.component';
 import { FooditemModifyComponent } from './fooditem-modify/fooditem-modify.component';
-import { FooditemService } from './fooditem.service';
+import { ProductService } from './product.service';
 import { MaterialModule } from '../material.module';
+import { FileUploadComponent } from './fooditem-new/file-upload/file-upload.component';
+import { CoreModule } from '../core/core.module';
+
 
 const productRoutes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
@@ -21,6 +25,8 @@ const productRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
+    FlexLayoutModule,
     FormsModule,
     MaterialModule,
     ReactiveFormsModule,
@@ -30,8 +36,9 @@ const productRoutes: Routes = [
     FooditemListComponent,
     FooditemDetailComponent,
     FooditemNewComponent,
-    FooditemModifyComponent
+    FooditemModifyComponent,
+    FileUploadComponent
   ],
-  providers: [FooditemService]
+  providers: [ProductService]
 })
 export class ProductModule {}
