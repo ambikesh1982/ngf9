@@ -18,9 +18,12 @@ export class FileUploadComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    // console.log('images[0]: ', this.images[0]);
+    // this.imagePreviewURL = this.images[0];
   }
 
   ngOnChanges() {
+    this.imagePreviewURL = this.images[0];
     console.log('Images data from firebase: ', this.images);
   }
 

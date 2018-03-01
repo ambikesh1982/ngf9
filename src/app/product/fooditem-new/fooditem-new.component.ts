@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ProductService } from '../product.service';
 import { Fooditem } from '../fooditem';
-import { Observable } from 'rxjs/Observable';
-import { DialogService } from '../../core/dialog.service';
 
 
 @Component({
@@ -13,16 +10,12 @@ import { DialogService } from '../../core/dialog.service';
 })
 export class FooditemNewComponent implements OnInit {
   stepperStep: number; // 4 step stepper. 1. Image upload, 2. fooditem details, 3. address, 4. post/publish
-  productForm: FormGroup;
   defaultFooditem: Fooditem;
   isAdding: boolean;
-  foodCategories = [ 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Main Course', 'Starter', 'Sweet', 'Bakery' ];
-  foodCuisine = [ 'North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
 
-  constructor(public product: ProductService, private fb: FormBuilder, private dialog: DialogService ) {
+  constructor(public product: ProductService ) {
     this.isAdding = false;
     this.stepperStep = 1;
-    this.createForm();
 
     // Setting up default fooditem to initialize firebase db entry.
     this.defaultFooditem = {
@@ -43,33 +36,5 @@ export class FooditemNewComponent implements OnInit {
     console.log('Default fooditem: ', this.defaultFooditem);
     this.product.initializeProduct(this.defaultFooditem);
     }
-
-
-
-  createForm() {
-    // User input values
-    this.productForm = this.fb.group({
-      title: ['', Validators.required],
-      description: '',
-      price: [0.0, Validators.required],
-      serving: [1, Validators.required],
-      isNonVeg: true,
-      category: '',
-      cuisine: '',
-    });
-    console.log('Product Input values: ', this.productForm.value);
-  }
-
-  prepareProductData(data: any) {}
-
-  saveProductData() {
-    const formModel = this.productForm.value;
-    console.log('Product Input values: ', formModel);
-  }
-
-  onSubmit() {
-    this.isAdding = true;
-    this.saveProductData();
-  }
 
 }

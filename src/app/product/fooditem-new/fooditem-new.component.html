@@ -20,6 +20,10 @@
       <app-file-upload [images]="item.images"></app-file-upload>
     </mat-step>
 
+    <mat-step label="Add details">
+       <app-item-form></app-item-form>
+    </mat-step>
+
   </mat-vertical-stepper>
 
   <div *ngIf="(product.snapshot$ | async) as snap">
