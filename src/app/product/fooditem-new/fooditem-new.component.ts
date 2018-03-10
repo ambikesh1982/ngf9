@@ -3,20 +3,19 @@ import { ProductService } from '../product.service';
 import { Fooditem } from '../fooditem';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-fooditem-new',
   templateUrl: './fooditem-new.component.html',
   styleUrls: ['./fooditem-new.component.scss']
 })
+
 export class FooditemNewComponent implements OnInit {
-  newFooditemFrom: any;
-  newFooditem: Fooditem;
-  newFooditemID: string;
 
   foodCategories = ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Main Course', 'Starter', 'Sweet', 'Bakery'];
   foodCuisine = ['North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
   foodServing = [1, 2, 3, 4, 'More'];
+
+  newFooditem: Fooditem;
   productForm: FormGroup;
 
   constructor(public product: ProductService, private formBuilder: FormBuilder) { }

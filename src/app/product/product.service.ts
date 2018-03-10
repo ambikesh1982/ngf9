@@ -15,7 +15,6 @@ export class ProductService {
   fooditemsPath: string;
   images: string[];
   previewImage: string;
-  productFormData: any;
   productCollectionRef: AngularFirestoreCollection<Fooditem>;
   productDocumentRef: AngularFirestoreDocument<Fooditem>;
   productData$: Observable<Fooditem>;
@@ -46,17 +45,6 @@ export class ProductService {
     this.currentDocumentID = this.db.createId();
     this.productData$ = this.getProductData(this.currentDocumentID);
     return this.currentDocumentID;
-    // this.currentDocumentID$ = Observable.of(this.currentDocumentID);
-
-    // this.productCollectionRef.add(defaultFooditem)
-    //   .then(docRef => {
-    //     this.currentDocumentID$ = Observable.of(docRef.id);
-    //     this.currentDocumentID = docRef.id;
-    //     this.productData$ = this.getProductData(docRef.id);
-    //     console.log('After adding fooditem: ', docRef.id);
-    //   }).catch(error => {
-    //     console.log('Error while adding default fooditem to db:', error);
-    //   });
   }
 
   getProductData(documentId: string): Observable<Fooditem> {
@@ -65,6 +53,7 @@ export class ProductService {
     this.productDocumentRef = this.db.doc<Fooditem>(docRef);
     return this.productDocumentRef.valueChanges();
   }
+
 
   async createProduct(fooditem: Fooditem): Promise<string> {
     fooditem.id = this.currentDocumentID;
@@ -75,7 +64,7 @@ export class ProductService {
     }, err => {
       console.log('Error during create fooditem: ', err);
     });
-    // fooditem.createdAt =
+
     return this.currentDocumentID;
   }
 
@@ -85,12 +74,14 @@ export class ProductService {
     const storageRef = this.storage.ref(imagePath);
   }
 
+
   uploadFiles(files: FileList) {
     console.log('Selected files: ', files);
     for (let index = 0; index < files.length; index++) {
       this.uploadSingleFile(files[index]);
     }
   }
+
 
   private uploadSingleFile(file: File) {
     const fileStoragePath = `${this.storagePath}/${this.currentDocumentID}/${new Date().getTime()}_${file.name}`;
@@ -112,23 +103,6 @@ export class ProductService {
         }
       })
     );
-  }
-
-  // Step:2 Add form data
-  getProductFormsData( formsData: any) {
-    console.log('Data from product form: ', formsData);
-    this.productFormData = formsData;
-  }
-
-  // Save image path to firebase after completion of image upload to firebase storage.
-  saveImagePath(documentId: string, data: string) {
-    // Using set method, to add documentId with image data.
-    this.productCollectionRef.doc(documentId).set({images: this.images});
-  }
-
-  saveFormData(documentId: string, formData: string) {
-    console.log('TODO:Save user input data to firebase');
-    this.productCollectionRef.doc(documentId).update(formData);
   }
 
   // When user deletes an image.

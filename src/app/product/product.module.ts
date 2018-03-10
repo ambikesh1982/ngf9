@@ -12,7 +12,6 @@ import { ProductService } from './product.service';
 import { MaterialModule } from '../material.module';
 import { FileUploadComponent } from './fooditem-new/file-upload/file-upload.component';
 import { CoreModule } from '../core/core.module';
-import { ItemFormComponent } from './fooditem-new/item-form/item-form.component';
 
 
 const productRoutes: Routes = [
@@ -39,7 +38,6 @@ const productRoutes: Routes = [
     FooditemNewComponent,
     FooditemModifyComponent,
     FileUploadComponent,
-    ItemFormComponent
   ],
   providers: [ProductService]
 })
