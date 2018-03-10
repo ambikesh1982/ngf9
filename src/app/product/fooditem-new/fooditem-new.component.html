@@ -1,4 +1,4 @@
-<div *ngIf="(product.currentDocumentID$ | async); 
+<div *ngIf="product.currentDocumentID; 
     then itemCreated 
     else itemNotCreated">
 </div>
@@ -13,23 +13,70 @@
 </ng-template>
 
 <ng-template #itemCreated>
+  <mat-vertical-stepper  style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
 
-  <mat-vertical-stepper *ngIf="(product.productData$ | async) as item" style="width: 400px" linear="true">
-
+    <!-- <mat-step label="Upload Photos" [completed]="product.atLeastOneImageAdded"> -->
+      <!-- <app-file-upload [previewImage]="" [images]=""></app-file-upload> -->
     <mat-step label="Upload Photos">
-      <app-file-upload [images]="item.images"></app-file-upload>
+       <app-file-upload></app-file-upload>
     </mat-step>
 
-    <mat-step label="Add details">
-       <app-item-form></app-item-form>
+    <mat-step label="Add details" [stepControl]="productForm">
+      <!-- <form class="product-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate> -->
+      <form class="product-form" [formGroup]="productForm" novalidate>
+        <mat-form-field class="product-full-width">
+          <input matInput type="text" placeholder="Title" formControlName="title" required>
+        </mat-form-field>
+      
+        <mat-slide-toggle matInput formControlName="isNonVeg" required>Veg / Non-Veg</mat-slide-toggle>
+      
+        <mat-form-field class="product-full-width">
+          <input matInput type="textarea" placeholder="Describe your food item here" formControlName="description">
+        </mat-form-field>
+      
+        <mat-form-field class="product-full-width">
+          <input matInput type="number" placeholder="Price" formControlName="price" required>
+        </mat-form-field>
+      
+        <mat-form-field class="product-full-width">
+          <mat-select placeholder="Serving" formControlName="serving" required>
+            <mat-option *ngFor="let serving of foodServing" [value]="serving">{{serving}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <mat-form-field class="product-full-width">
+          <mat-select placeholder="Food Category" formControlName="category" required>
+            <mat-option *ngFor="let category of foodCategories" [value]="category">
+              {{category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <mat-form-field class="product-full-width">
+          <mat-select placeholder="Food Cuisine" formControlName="cuisine" required>
+            <mat-option>-Add New-</mat-option>
+            <mat-option *ngFor="let cuisine of foodCuisine" [value]="cuisine">
+              {{cuisine}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <!-- <button mat-raised-button [disabled]="productForm.status==='INVALID'? true: false" type="submit">Next</button> -->
+      
+      </form>
+    </mat-step>
+
+    <mat-step label="Locate yourself!">
+      <h3>TODO: Google maps address autocomplete component.</h3>
+    </mat-step>
+
+    <mat-step label="Verify and post!">
+      <h3>TODO: Verify whole fooditem and post.</h3>
     </mat-step>
 
   </mat-vertical-stepper>
 
   <div *ngIf="(product.snapshot$ | async) as snap">
     {{ snap.bytesTransferred }} of {{ snap.totalBytes }}
-</div>
-
- 
-
+  </div>
 </ng-template>

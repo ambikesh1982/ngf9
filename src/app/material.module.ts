@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import {
   MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
   MatChipsModule,
   MatGridListModule,
@@ -22,6 +23,7 @@ import {
   exports: [
     // CommonModule
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatChipsModule,
     MatGridListModule,

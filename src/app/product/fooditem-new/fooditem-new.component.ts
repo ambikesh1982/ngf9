@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
 import { Fooditem } from '../fooditem';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -9,32 +10,76 @@ import { Fooditem } from '../fooditem';
   styleUrls: ['./fooditem-new.component.scss']
 })
 export class FooditemNewComponent implements OnInit {
-  stepperStep: number; // 4 step stepper. 1. Image upload, 2. fooditem details, 3. address, 4. post/publish
-  defaultFooditem: Fooditem;
-  isAdding: boolean;
+  newFooditemFrom: any;
+  newFooditem: Fooditem;
+  newFooditemID: string;
 
-  constructor(public product: ProductService ) {
-    this.isAdding = false;
-    this.stepperStep = 1;
+  foodCategories = ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Main Course', 'Starter', 'Sweet', 'Bakery'];
+  foodCuisine = ['North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
+  foodServing = [1, 2, 3, 4, 'More'];
+  productForm: FormGroup;
 
-    // Setting up default fooditem to initialize firebase db entry.
-    this.defaultFooditem = {
-      title: 'Untitled fooditem',
-      description: '',
-      currency: 'INR',
-      price: 0.0,
-      serving: 1,
-      isNonVeg: false,
-      category: '',
-      cuisine: '',
-      images: [],
-      stepperStep: 1,
-    };
-  }
+  constructor(public product: ProductService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    console.log('Default fooditem: ', this.defaultFooditem);
-    this.product.initializeProduct(this.defaultFooditem);
+    // Initialize new fooditem with id = firebase key
+    this.newFooditem = {};
+    this.newFooditem.id = this.product.initializeProduct();
+    this.createForm();
+  }
+
+  createForm() {
+    // User input values
+    this.productForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      description: '',
+      price: [, Validators.required],
+      serving: [1, Validators.required],
+      isNonVeg: true,
+      category: '',
+      cuisine: '',
+    });
+  }
+
+  prepareDataFromStepper(stepperEvent: any) {
+    console.log('stepperEvent: ', stepperEvent);
+    if (stepperEvent.previouslySelectedIndex < stepperEvent.selectedIndex) {
+
+      switch (stepperEvent.previouslySelectedIndex) {
+        case 0: {
+          this.newFooditem.images = this.product.images;
+          console.log('Completed Step 0: Added image array', this.newFooditem);
+          break;
+        }
+        case 1: {
+          this.newFooditem.title = this.productForm.value.title;
+          this.newFooditem.description = this.productForm.value.description;
+          this.newFooditem.isNonVeg = this.productForm.value.isNonVeg;
+          this.newFooditem.price = this.productForm.value.price;
+          this.newFooditem.serving = this.productForm.value.serving;
+          this.newFooditem.category = this.productForm.value.category;
+          this.newFooditem.cuisine = this.productForm.value.cuisine;
+          console.log('Completed Step 1: Added form data', this.newFooditem);
+          break;
+        }
+        case 2: {
+          console.log('Completed Step 2: Add location data');
+          break;
+        }
+        case 3: {
+          console.log('Completed Step 3: Show preview and post');
+          this.product.createProduct(this.newFooditem);
+          break;
+        }
+      }
+
+    } else {
+      console.log('User moved back to previous step');
     }
 
+  }
+
 }
+
+
+// 00000034074055474	OD Account	ERANDWANE

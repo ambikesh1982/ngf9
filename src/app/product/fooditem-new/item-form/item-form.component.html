@@ -4,7 +4,7 @@
     <input matInput type="text" placeholder="Title" formControlName="title" required>
   </mat-form-field>
 
-  <mat-slide-toggle matInput formControlName="isNonVeg" required>Non-veg!</mat-slide-toggle>
+  <mat-slide-toggle matInput formControlName="isNonVeg" required>Veg / Non-Veg</mat-slide-toggle>
 
   <mat-form-field class="product-full-width">
     <input matInput type="textarea" placeholder="Describe your food item here" formControlName="description">
@@ -15,7 +15,9 @@
   </mat-form-field>
 
   <mat-form-field class="product-full-width">
-    <input matInput type="number" placeholder="Serving" formControlName="serving" required>
+    <mat-select placeholder="Serving" formControlName="serving" required>
+      <mat-option *ngFor="let serving of foodServing" [value]="serving">{{serving}}</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field class="product-full-width">

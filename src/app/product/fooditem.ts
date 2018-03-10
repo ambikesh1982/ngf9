@@ -14,18 +14,19 @@ export class Feedback {
 }
 
 export interface Fooditem {
-  title: string;
-  description: string;
-  currency: string;
-  price: number;
-  serving: number;
-  isNonVeg: boolean;
-  category: string;
-  cuisine: string;
-  images: string[];
-  stepperStep: number;
-  // addedAt: Date;
-  // addedBy: MiniUser;
+  id?: string;
+  title?: string;
+  description?: string;
+  currency?: string;
+  price?: number;
+  serving?: number;
+  isNonVeg?: boolean;
+  category?: string;
+  cuisine?: string;
+  images?: string[];
+  stepperStep?: number;
+  // createdAt: Date;
+  // createdBy: MiniUser;
   // location?: GeoLocation;
   // feedback?: Feedback;
 }

@@ -1,13 +1,16 @@
 
 <div>
-  <img *ngIf="imagePreviewURL" mat-card-image [src]="imagePreviewURL" alt="no_image" style="border-radius: 10px 10px 0 0; height: 200px">
+  <img *ngIf="product.previewImage" mat-card-image [src]="product.previewImage" alt="no_image" style="border-radius: 10px 10px 0 0; height: 200px">
   <!-- <button mat-icon-button>delete</button> -->
 
   <mat-grid-list cols="4" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let img of images">
+    <mat-grid-tile *ngFor="let img of product.images">
       <img mat-card-image [src]="img" alt="" style="max-height: 100%; max-width: 100%" (click)="showPreview(img)">
     </mat-grid-tile>
   </mat-grid-list>
+  </div>
+
+  <div>
   <button mat-raised-button 
     color="accent" 
     style="float:initial; width:100%" 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { ProductService } from '../../product.service';
 
 @Component({
   selector: 'app-item-form',
@@ -10,11 +11,10 @@ export class ItemFormComponent implements OnInit {
 
   foodCategories = ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Main Course', 'Starter', 'Sweet', 'Bakery' ];
   foodCuisine = ['North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
-  isAdding: boolean;
+  foodServing = [1, 2, 3, 4, 'More'];
   productForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.isAdding = false;
+  constructor(private formBuilder: FormBuilder, private product: ProductService) {
     this.createForm();
    }
 
@@ -26,18 +26,16 @@ export class ItemFormComponent implements OnInit {
     this.productForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: '',
-      price: [0.0, Validators.required],
+      price: [, Validators.required],
       serving: [1, Validators.required],
       isNonVeg: true,
       category: '',
       cuisine: '',
     });
-    console.log('Product Input values: ', this.productForm.value);
   }
 
   onSubmit() {
-    this.isAdding = true;
-    // this.saveProductData();
+    this.product.getProductFormsData(this.productForm.value);
   }
 
 }

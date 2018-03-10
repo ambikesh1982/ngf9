@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ProductService } from '../../product.service';
 
 @Component({
@@ -6,26 +6,18 @@ import { ProductService } from '../../product.service';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
-export class FileUploadComponent implements OnInit, OnChanges {
+export class FileUploadComponent implements OnInit {
 
   selectedFileIndex: number;
   maxFileUploadCount: number;
-  imagePreviewURL: string;
-  @Input() images: string[];
-  constructor( private product: ProductService) {
+
+  constructor( public product: ProductService) {
     this.selectedFileIndex = 0;
     this.maxFileUploadCount = 4;
+
   }
 
-  ngOnInit() {
-    // console.log('images[0]: ', this.images[0]);
-    // this.imagePreviewURL = this.images[0];
-  }
-
-  ngOnChanges() {
-    this.imagePreviewURL = this.images[0];
-    console.log('Images data from firebase: ', this.images);
-  }
+  ngOnInit() { }
 
   selectedFiles(imageFiles: FileList) {
     const fileCount = imageFiles.length;
@@ -41,7 +33,11 @@ export class FileUploadComponent implements OnInit, OnChanges {
   }
 
   showPreview(img: string) {
-    this.imagePreviewURL = img;
+    this.product.previewImage = img;
+  }
+
+  getImageURL(imagePath: string) {
+    console.log('TODO: get image URL from firesotre: ', imagePath);
   }
 
 }
