@@ -16,11 +16,13 @@ export class AutoAddressComponent implements AfterViewInit, OnInit {
   private marker: any;
   private coords: any;
   private initVal = '';
+
   myGeoCoordinates = { lat: 0, lng: 0 };
+
   mylat = 0.0;
   mylng = 0.0;
 
-  @ViewChild('addessSearch') addressSearch: ElementRef;
+  @ViewChild('addessSearch') searchElm: ElementRef;
   @ViewChild('mapElement') mapElm: ElementRef;
 
   constructor(private load: ScriptLoadService) { }
@@ -41,6 +43,7 @@ export class AutoAddressComponent implements AfterViewInit, OnInit {
           this.load.loadScript(googleMapsURL, 'gmap', () => {
             const gmaps = window['google']['maps'];
             console.log('Google maps', gmaps);
+
             const loc = new gmaps.LatLng(this.mylat, this.mylng);
 
             // this.coords = function (x, y) {
@@ -58,6 +61,16 @@ export class AutoAddressComponent implements AfterViewInit, OnInit {
             this.marker = new gmaps.Marker({
               position: loc,
               map: this.map
+            });
+
+            const autoComplete = new gmaps.places.Autocomplete( this.searchElm.nativeElement, {types: ['geocode']});
+
+            autoComplete.addListener('place_changed', () => {
+              const place = autoComplete.getPlace();
+              if (!place.geometry) {
+                return;
+              }
+              console.log('Place autocomplete: ', place);
             });
 
             // this.reverseGeoCoding(this.mylat, this.mylng);
