@@ -12,6 +12,7 @@ import { ProductService } from './product.service';
 import { MaterialModule } from '../material.module';
 import { FileUploadComponent } from './fooditem-new/file-upload/file-upload.component';
 import { CoreModule } from '../core/core.module';
+import { AutoAddressComponent } from './fooditem-new/auto-address/auto-address.component';
 
 
 const productRoutes: Routes = [
@@ -38,6 +39,7 @@ const productRoutes: Routes = [
     FooditemNewComponent,
     FooditemModifyComponent,
     FileUploadComponent,
+    AutoAddressComponent,
   ],
   providers: [ProductService]
 })

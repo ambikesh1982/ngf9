@@ -13,17 +13,19 @@
 </ng-template>
 
 <ng-template #itemCreated>
-  <mat-vertical-stepper  style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
+  <mat-horizontal-stepper  style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
 
     <!-- <mat-step label="Upload Photos" [completed]="product.atLeastOneImageAdded"> -->
       <!-- <app-file-upload [previewImage]="" [images]=""></app-file-upload> -->
-    <mat-step label="Upload Photos">
+    <!-- <mat-step label="Upload Photos"> -->
+    <mat-step [completed]="product.atLeastOneImageAdded">
        <app-file-upload></app-file-upload>
     </mat-step>
 
-    <mat-step label="Add details" [stepControl]="productForm">
+    <!-- <mat-step label="Add details" [stepControl]="productForm"> -->
+      <mat-step [stepControl]="productForm">
       <!-- <form class="product-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate> -->
-      <form class="product-form" [formGroup]="productForm" novalidate>
+      <form class="product-form" [formGroup]="productForm" >
         <mat-form-field class="product-full-width">
           <input matInput type="text" placeholder="Title" formControlName="title" required>
         </mat-form-field>
@@ -60,21 +62,22 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      
         <!-- <button mat-raised-button [disabled]="productForm.status==='INVALID'? true: false" type="submit">Next</button> -->
-      
       </form>
     </mat-step>
 
-    <mat-step label="Locate yourself!">
+    <!-- <mat-step label="Locate yourself!"> -->
+    <mat-step>
+      <app-auto-address></app-auto-address>
       <h3>TODO: Google maps address autocomplete component.</h3>
     </mat-step>
 
-    <mat-step label="Verify and post!">
+    <!-- <mat-step label="Verify and post!"> -->
+    <mat-step>
       <h3>TODO: Verify whole fooditem and post.</h3>
     </mat-step>
 
-  </mat-vertical-stepper>
+  </mat-horizontal-stepper>
 
   <div *ngIf="(product.snapshot$ | async) as snap">
     {{ snap.bytesTransferred }} of {{ snap.totalBytes }}

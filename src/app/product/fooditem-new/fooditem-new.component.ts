@@ -11,12 +11,16 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 export class FooditemNewComponent implements OnInit {
 
-  foodCategories = ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Main Course', 'Starter', 'Sweet', 'Bakery'];
+  foodCategories = ['Main Course', 'Starter', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Sweet', 'Bakery'];
   foodCuisine = ['North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
   foodServing = [1, 2, 3, 4, 'More'];
 
   newFooditem: Fooditem;
   productForm: FormGroup;
+
+  stepControl: number;
+
+  selectedIndex = 0;
 
   constructor(public product: ProductService, private formBuilder: FormBuilder) { }
 
@@ -48,6 +52,7 @@ export class FooditemNewComponent implements OnInit {
         case 0: {
           this.newFooditem.images = this.product.images;
           console.log('Completed Step 0: Added image array', this.newFooditem);
+          this.stepControl = 0;
           break;
         }
         case 1: {
@@ -59,14 +64,16 @@ export class FooditemNewComponent implements OnInit {
           this.newFooditem.category = this.productForm.value.category;
           this.newFooditem.cuisine = this.productForm.value.cuisine;
           console.log('Completed Step 1: Added form data', this.newFooditem);
+          this.stepControl = 1;
           break;
         }
         case 2: {
-          console.log('Completed Step 2: Add location data');
+          console.log('Completed Step 2: Add location data and preview');
+          this.selectedIndex = stepperEvent.selectedIndex;
           break;
         }
-        case 3: {
-          console.log('Completed Step 3: Show preview and post');
+        default: {
+          console.log('Completed Step 3: Post');
           this.product.createProduct(this.newFooditem);
           break;
         }
