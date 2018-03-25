@@ -33,14 +33,14 @@ export class ProductService {
       this.storagePath = 'f9_fooditems'; // Path of the application storage bucket.
       this.fooditemsPath = 'f9_fooditems'; // Path of fooditem collection.
       this.productCollectionRef = this.db.collection<Fooditem>(this.fooditemsPath); // Create a reference for DB operations.
-      console.log('serverTimestamp: ', this.timestamp);
   }
 
   get timestamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
   }
 
-  // this method get execute while adding new fooditem. Creates a new DB entry and stores document ID for future reference.
+  // this method get execute while adding new fooditem.
+  // Creates a new DB entry and stores document ID for future reference.
   initializeProduct(): string {
     this.currentDocumentID = this.db.createId();
     this.productData$ = this.getProductData(this.currentDocumentID);
@@ -85,7 +85,6 @@ export class ProductService {
 
   private uploadSingleFile(file: File) {
     const fileStoragePath = `${this.storagePath}/${this.currentDocumentID}/${new Date().getTime()}_${file.name}`;
-    console.log('File storage path: ', fileStoragePath);
     this.task = this.storage.upload( fileStoragePath, file );
     this.downloadURL$ = this.task.downloadURL();
     this.uploadPercentage$ = this.task.percentageChanges();
@@ -97,9 +96,6 @@ export class ProductService {
           this.atLeastOneImageAdded = true;
           this.images.push(res.downloadURL);
           this.previewImage = res.downloadURL;
-          // Save image paths to images array in firebase.
-          // this.saveImagePath(this.currentDocumentID, fileStoragePath);
-          // this.saveImagePath(this.currentDocumentID, res.downloadURL);
         }
       })
     );

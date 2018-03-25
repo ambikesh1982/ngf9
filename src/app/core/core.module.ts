@@ -5,12 +5,13 @@ import { AuthGuard } from './auth.guard';
 import { CanDeactivateGuard } from './can-deactivate.guard';
 import { DialogService } from './dialog.service';
 import { ScriptLoadService } from './script-load.service';
+import { GeolocationService } from './geolocation.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers: [AuthService, AuthGuard, CanDeactivateGuard, DialogService, ScriptLoadService]
+  providers: [AuthService, AuthGuard, CanDeactivateGuard, DialogService, ScriptLoadService, GeolocationService]
 })
 export class CoreModule { }

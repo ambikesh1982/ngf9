@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
 import { Fooditem } from '../fooditem';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { GeolocationService } from '../../core/geolocation.service';
 
 @Component({
   selector: 'app-fooditem-new',
@@ -11,6 +13,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 export class FooditemNewComponent implements OnInit {
 
+  locationFromNavigator: { lat: number, lng: number };
+
   foodCategories = ['Main Course', 'Starter', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Sweet', 'Bakery'];
   foodCuisine = ['North Indian', 'South Indian', 'Punjabi', 'Mughlai', 'Arebic', ];
   foodServing = [1, 2, 3, 4, 'More'];
@@ -18,11 +22,30 @@ export class FooditemNewComponent implements OnInit {
   newFooditem: Fooditem;
   productForm: FormGroup;
 
-  stepControl: number;
-
   selectedIndex = 0;
 
-  constructor(public product: ProductService, private formBuilder: FormBuilder) { }
+  userAddress: { address: string, lat: number, lng: number };
+
+  constructor(
+    public product: ProductService,
+    private formBuilder: FormBuilder,
+    private geolocation: GeolocationService) {
+    if (navigator.geolocation) {
+      this.geolocation.getCurrentPosition().subscribe(
+        pos => {
+          console.log('Location resolved');
+          this.locationFromNavigator = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        },
+        (err: any) => {
+          switch (err.code) {
+            case 3:
+              console.log(err);
+              this.locationFromNavigator = { lat: 1.3522174, lng: 103.87970299999999 };
+              console.log('Default location is set for user');
+          }
+        });
+    }
+  }
 
   ngOnInit() {
     // Initialize new fooditem with id = firebase key
@@ -50,12 +73,13 @@ export class FooditemNewComponent implements OnInit {
 
       switch (stepperEvent.previouslySelectedIndex) {
         case 0: {
+          // This executes when you move to step number 2.
           this.newFooditem.images = this.product.images;
           console.log('Completed Step 0: Added image array', this.newFooditem);
-          this.stepControl = 0;
           break;
         }
         case 1: {
+          // This executes when you move to step number 3.
           this.newFooditem.title = this.productForm.value.title;
           this.newFooditem.description = this.productForm.value.description;
           this.newFooditem.isNonVeg = this.productForm.value.isNonVeg;
@@ -63,26 +87,29 @@ export class FooditemNewComponent implements OnInit {
           this.newFooditem.serving = this.productForm.value.serving;
           this.newFooditem.category = this.productForm.value.category;
           this.newFooditem.cuisine = this.productForm.value.cuisine;
-          console.log('Completed Step 1: Added form data', this.newFooditem);
-          this.stepControl = 1;
+          console.log('Completed Step 1: Added form data ', this.newFooditem);
           break;
         }
         case 2: {
-          console.log('Completed Step 2: Add location data and preview');
-          this.selectedIndex = stepperEvent.selectedIndex;
-          break;
-        }
-        default: {
-          console.log('Completed Step 3: Post');
-          this.product.createProduct(this.newFooditem);
+          // This executes when you move to step number 4.
+          // With user address product data is finished.
+          // Show previw of the fooditem and ask user to post or cancel.
+          this.newFooditem.address = this.userAddress;
+          console.log('Completed Step 2: Added location data ', this.newFooditem);
+          // this.product.createProduct(this.newFooditem);
           break;
         }
       }
+    } else { console.log('User moved back to previous step'); }
+  }
 
-    } else {
-      console.log('User moved back to previous step');
-    }
+  getUserSelectedAddress(eventData: any) {
+    console.log(eventData);
+    this.userAddress = eventData;
+  }
 
+  showPreview(imgData: string) {
+    console.log(imgData);
   }
 
 }

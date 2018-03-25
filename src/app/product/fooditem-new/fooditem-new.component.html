@@ -3,49 +3,44 @@
     else itemNotCreated">
 </div>
 
-<!-- <div *ngIf="(product.currentDocumentID$ | async); 
-    then itemNotCreated
-    else itemCreated">
-</div> -->
-
 <ng-template #itemNotCreated>
   <mat-spinner></mat-spinner>
 </ng-template>
 
 <ng-template #itemCreated>
-  <mat-horizontal-stepper  style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
+  <mat-horizontal-stepper style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
 
-    <!-- <mat-step label="Upload Photos" [completed]="product.atLeastOneImageAdded"> -->
-      <!-- <app-file-upload [previewImage]="" [images]=""></app-file-upload> -->
-    <!-- <mat-step label="Upload Photos"> -->
+    <!-- Step 1: Add images -->
     <mat-step [completed]="product.atLeastOneImageAdded">
-       <app-file-upload></app-file-upload>
+      <app-file-upload></app-file-upload>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
     </mat-step>
 
-    <!-- <mat-step label="Add details" [stepControl]="productForm"> -->
-      <mat-step [stepControl]="productForm">
-      <!-- <form class="product-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate> -->
-      <form class="product-form" [formGroup]="productForm" >
+    <!-- Step 2: Product form -->
+    <mat-step [stepControl]="productForm">
+      <form class="product-form" [formGroup]="productForm">
         <mat-form-field class="product-full-width">
           <input matInput type="text" placeholder="Title" formControlName="title" required>
         </mat-form-field>
-      
+
         <mat-slide-toggle matInput formControlName="isNonVeg" required>Veg / Non-Veg</mat-slide-toggle>
-      
+
         <mat-form-field class="product-full-width">
           <input matInput type="textarea" placeholder="Describe your food item here" formControlName="description">
         </mat-form-field>
-      
+
         <mat-form-field class="product-full-width">
           <input matInput type="number" placeholder="Price" formControlName="price" required>
         </mat-form-field>
-      
+
         <mat-form-field class="product-full-width">
           <mat-select placeholder="Serving" formControlName="serving" required>
             <mat-option *ngFor="let serving of foodServing" [value]="serving">{{serving}}</mat-option>
           </mat-select>
         </mat-form-field>
-      
+
         <mat-form-field class="product-full-width">
           <mat-select placeholder="Food Category" formControlName="category" required>
             <mat-option *ngFor="let category of foodCategories" [value]="category">
@@ -53,7 +48,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      
+
         <mat-form-field class="product-full-width">
           <mat-select placeholder="Food Cuisine" formControlName="cuisine" required>
             <mat-option>-Add New-</mat-option>
@@ -63,18 +58,41 @@
           </mat-select>
         </mat-form-field>
         <!-- <button mat-raised-button [disabled]="productForm.status==='INVALID'? true: false" type="submit">Next</button> -->
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
       </form>
     </mat-step>
 
-    <!-- <mat-step label="Locate yourself!"> -->
+
+    <!-- Step 3: Add user address -->
     <mat-step>
-      <app-auto-address></app-auto-address>
-      <h3>TODO: Google maps address autocomplete component.</h3>
+      <app-auto-address *ngIf="locationFromNavigator as currentPos" [locationFromNavigator]="currentPos" (UserCoordsFromAutoComplete)="getUserSelectedAddress($event)">
+      </app-auto-address>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
     </mat-step>
 
-    <!-- <mat-step label="Verify and post!"> -->
+
+    <!-- Step 4: Show preview  -->
     <mat-step>
-      <h3>TODO: Verify whole fooditem and post.</h3>
+      <div>
+        <img *ngIf="newFooditem.images" mat-card-image [src]="newFooditem.images[0]" alt="no_image" style="border-radius: 10px 10px 0 0; height: 200px">
+        <!-- <button mat-icon-button>delete</button> -->
+      
+        <mat-grid-list cols="4" rowHeight="1:1">
+          <mat-grid-tile *ngFor="let img of newFooditem.images">
+            <img mat-card-image [src]="img" alt="" style="max-height: 100%; max-width: 100%" (click)="showPreview(img)">
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Post</button>
+      </div>
     </mat-step>
 
   </mat-horizontal-stepper>

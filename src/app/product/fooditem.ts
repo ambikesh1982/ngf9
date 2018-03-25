@@ -1,3 +1,5 @@
+import { GeoPoint } from '@firebase/firestore-types';
+
 export class MiniUser {
   userId: string;
   userName: string;
@@ -27,7 +29,7 @@ export interface Fooditem {
   stepperStep?: number;
   // createdAt: Date;
   // createdBy: MiniUser;
-  // location?: GeoLocation;
+  address?: { address: string, lat: number, lng: number };
   // feedback?: Feedback;
 }
 

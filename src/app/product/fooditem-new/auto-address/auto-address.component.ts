@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { ScriptLoadService } from '../../../core/script-load.service';
+import { GeolocationService } from '../../../core/geolocation.service';
 
-const googleMapsApiKey = 'AIzaSyD2f1CqoyF3XhEuIPBXidqfXWTKPFyueIY';
-const googleMapsURL = 'https://maps.googleapis.com/maps/api/js?key=' + googleMapsApiKey + '&libraries=places';
+const gmapApiKey = 'AIzaSyD2f1CqoyF3XhEuIPBXidqfXWTKPFyueIY';
+const gmapURL = 'https://maps.googleapis.com/maps/api/js?key=' + gmapApiKey + '&libraries=places';
+
+import { } from 'googlemaps';
+
 
 @Component({
   selector: 'app-auto-address',
@@ -12,86 +16,87 @@ const googleMapsURL = 'https://maps.googleapis.com/maps/api/js?key=' + googleMap
 
 export class AutoAddressComponent implements AfterViewInit, OnInit {
 
+  // private map: google.maps.Map;
+  // private marker: google.maps.Marker;
+  // private center: google.maps.LatLng;
+
   private map: any;
   private marker: any;
-  private coords: any;
-  private initVal = '';
+  private center: any;
 
-  myGeoCoordinates = { lat: 0, lng: 0 };
-
-  mylat = 0.0;
-  mylng = 0.0;
+  @Input() locationFromNavigator: { lat: number, lng: number };
+  @Output() UserCoordsFromAutoComplete = new EventEmitter<{ address: string, lat: number, lng: number }>();
 
   @ViewChild('addessSearch') searchElm: ElementRef;
   @ViewChild('mapElement') mapElm: ElementRef;
 
-  constructor(private load: ScriptLoadService) { }
+  constructor(
+    private load: ScriptLoadService,
+    private ngZone: NgZone
+  ) { }
 
   ngOnInit() {
-    // this.nearByGeoCodes = [{ lat: 0, lng: 0 }];
-    }
-
+    console.log('Location set form parent component: ', this.locationFromNavigator);
+  }
 
   ngAfterViewInit() {
+    if (this.locationFromNavigator) {
+      this.load.loadScript(gmapURL, 'gmap', () => {
+        this.center = new google.maps.LatLng(
+          this.locationFromNavigator.lat,
+          this.locationFromNavigator.lng);
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          this.mylat = position.coords.latitude;
-          this.mylng = position.coords.longitude;
-
-          this.load.loadScript(googleMapsURL, 'gmap', () => {
-            const gmaps = window['google']['maps'];
-            console.log('Google maps', gmaps);
-
-            const loc = new gmaps.LatLng(this.mylat, this.mylng);
-
-            // this.coords = function (x, y) {
-            //   return new gmaps.LatLng(x, y);
-            // };
-
-            // Create a map with user location at center.
-            this.map = new gmaps.Map(this.mapElm.nativeElement, {
-              zoom: 18,
-              center: loc,
-              scrollwheel: true,
-            });
-
-            // Add a marker to user location.
-            this.marker = new gmaps.Marker({
-              position: loc,
-              map: this.map
-            });
-
-            const autoComplete = new gmaps.places.Autocomplete( this.searchElm.nativeElement, {types: ['geocode']});
-
-            autoComplete.addListener('place_changed', () => {
-              const place = autoComplete.getPlace();
-              if (!place.geometry) {
-                return;
-              }
-              console.log('Place autocomplete: ', place);
-            });
-
-            // this.reverseGeoCoding(this.mylat, this.mylng);
-
-          // console.log('My position is: ', this.myGeoCoordinates);
+        // Create map
+        this.map = new google.maps.Map(this.mapElm.nativeElement, {
+          zoom: 18,
+          center: this.center,
+          scrollwheel: false,
         });
-    });
-  }
-  }
 
-  // reverseGeoCoding(lattitude: number, longitude: number) {
-  //   const ADDRESS = new gmaps.Geocode;
-  //   const LATLNG = { lat: lattitude, lng: longitude };
-  //   ADDRESS.geocode({ location: LATLNG }, (results, status) => {
-  //     // results[0].address_components.forEach( (val) => {
-  //     //   console.log(val.types[0], ' - ', val.short_name);
-  //     // });
-  //     // console.log(results);
-  //     this.initVal = results[0].formatted_address;
+        // Add Marker to current location detected by browser
+        this.marker = new google.maps.Marker({
+          position: this.center,
+          map: this.map
+        });
 
-  //   });
-  // }
+        // Add Google Autocomplete to list near by addresses
+        const autoComplete = new google.maps.places.Autocomplete(this.searchElm.nativeElement, { types: ['address'] });
+
+        // bind autocomplete to search in near by locations only
+        autoComplete.bindTo('bounds', this.map);
+
+        // Listen to inputs field and find the places
+        autoComplete.addListener('place_changed', () => {
+          this.ngZone.run(() => {
+            this.marker.setVisible(false);
+            const place = autoComplete.getPlace();
+
+            if (!place.geometry) {
+              console.log('Unable to find a place!');
+              return;
+            }
+
+            if (place.geometry.viewport) {
+              this.map.fitBounds(place.geometry.viewport);
+            } else {
+              this.map.setCenter(place.geometry.location);
+              this.map.setZoom(17);
+            }
+
+            this.marker.setPosition(place.geometry.location);
+            this.marker.setVisible(true);
+
+            // Emit autoComplete coords via @Output
+            this.UserCoordsFromAutoComplete.emit({
+              address: place.formatted_address,
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng()
+            });
+
+          });
+        });
+      });
+    }
+  }
 
 }
