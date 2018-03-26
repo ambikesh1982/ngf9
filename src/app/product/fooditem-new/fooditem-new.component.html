@@ -1,6 +1,7 @@
 <div *ngIf="product.currentDocumentID; 
     then itemCreated 
-    else itemNotCreated">
+    else itemNotCreated"
+     fxLayout="column" fxLayoutAlign="center">
 </div>
 
 <ng-template #itemNotCreated>
@@ -8,13 +9,18 @@
 </ng-template>
 
 <ng-template #itemCreated>
-  <mat-horizontal-stepper style="width: 400px" linear="true" (selectionChange)=prepareDataFromStepper($event)>
+  <mat-horizontal-stepper  linear="true" (selectionChange)=prepareDataFromStepper($event)>
 
     <!-- Step 1: Add images -->
     <mat-step [completed]="product.atLeastOneImageAdded">
       <app-file-upload></app-file-upload>
-      <div>
-        <button mat-button matStepperNext>Next</button>
+      <div class="app-action">
+        <button 
+          mat-fab 
+          color="primary"
+          matStepperNext>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
       </div>
     </mat-step>
 
