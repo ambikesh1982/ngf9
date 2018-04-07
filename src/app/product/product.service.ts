@@ -96,6 +96,7 @@ export class ProductService {
           this.atLeastOneImageAdded = true;
           this.images.push(res.downloadURL);
           this.previewImage = res.downloadURL;
+          return Observable.of(null);
         }
       })
     );

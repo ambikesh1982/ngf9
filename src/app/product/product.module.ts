@@ -19,7 +19,7 @@ const productRoutes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
   { path: 'list', component: FooditemListComponent },
   { path: 'detail/:id', component: FooditemDetailComponent },
-  { path: 'new', component: FooditemNewComponent },
+  { path: 'addnew', component: FooditemNewComponent },
   { path: 'modify/:id', component: FooditemModifyComponent },
   ];
 

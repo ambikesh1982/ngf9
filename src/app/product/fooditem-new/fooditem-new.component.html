@@ -1,7 +1,7 @@
 <div *ngIf="product.currentDocumentID; 
     then itemCreated 
     else itemNotCreated"
-     fxLayout="column" fxLayoutAlign="center">
+     fxLayout="column" fxLayoutAlign="center center">
 </div>
 
 <ng-template #itemNotCreated>
@@ -9,24 +9,26 @@
 </ng-template>
 
 <ng-template #itemCreated>
-  <mat-horizontal-stepper  linear="true" (selectionChange)=prepareDataFromStepper($event)>
+  <mat-progress-bar *ngIf="(product.snapshot$ | async) as snap" value="(snap.bytesTransferred*100)/snap.totalBytes">
+  </mat-progress-bar>
+  <mat-horizontal-stepper  linear="false" (selectionChange)=prepareDataFromStepper($event)>
 
     <!-- Step 1: Add images -->
-    <mat-step [completed]="product.atLeastOneImageAdded">
+    <mat-step [completed]="product.atLeastOneImageAdded" style="min-height: 100vh">
       <app-file-upload></app-file-upload>
-      <div class="app-action">
+      <!-- <div class="app-action">
         <button 
           mat-fab 
           color="primary"
           matStepperNext>
           <mat-icon>arrow_forward</mat-icon>
         </button>
-      </div>
+      </div> -->
     </mat-step>
 
     <!-- Step 2: Product form -->
     <mat-step [stepControl]="productForm">
-      <form class="product-form" [formGroup]="productForm">
+      <form fxLayout="column" fxLayoutAlign="center stretch" [formGroup]="productForm">
         <mat-form-field class="product-full-width">
           <input matInput type="text" placeholder="Title" formControlName="title" required>
         </mat-form-field>
@@ -102,8 +104,4 @@
     </mat-step>
 
   </mat-horizontal-stepper>
-
-  <div *ngIf="(product.snapshot$ | async) as snap">
-    {{ snap.bytesTransferred }} of {{ snap.totalBytes }}
-  </div>
 </ng-template>

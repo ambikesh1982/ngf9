@@ -1,2 +1,51 @@
-<mat-toolbar color="primary" class="mat-elevation-z4 top-toolbar">F9</mat-toolbar>
-<router-outlet></router-outlet>
+<mat-toolbar mat-elevation-z24 style="justify-content:space-between">
+    <div>
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        Foodz9
+    </div>
+
+    <div>
+        <button mat-icon-button>
+            <mat-icon>shopping_cart</mat-icon>
+        </button>
+        <button mat-icon-button routerLink="/addnew">
+            <mat-icon>add_box</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
+
+<mat-sidenav-container>
+
+    <mat-sidenav #sidenav mode="over" fixedInViewport="true" fixedTopGap="56">
+        <mat-nav-list>
+            <mat-list-item *ngFor="let navItem of navList; let idx = index">Side-nav Menu item {{idx}}</mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content fxLayout="column">
+        <!-- Router outlet content goes here -->
+        <router-outlet></router-outlet>
+
+        <!-- Floating action fab button -->
+        <div style="position: fixed; bottom: 25px; right: 20px;">
+            <button mat-fab class="mat-elevation-z24">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<!-- <mat-toolbar>
+    <div>
+        <button mat-icon-button>
+            <mat-icon>arrow_backword</mat-icon>
+        </button>
+        Footer
+        <button mat-icon-button>
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+</mat-toolbar> -->

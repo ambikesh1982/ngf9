@@ -1,35 +1,25 @@
-
-<!-- <mat-card class="mat-elevation-z1" style="min-height: 400px"> -->
-<div>
-  <img 
-    *ngIf="product.previewImage" 
-    mat-card-image 
-    [src]="product.previewImage" 
-    alt="no_image" 
-    style="border-radius: 10px 10px 0 0; object-fit: cover; width: 100%; height: 200px">
-  <!-- <button mat-icon-button>delete</button> -->
-
-  <mat-grid-list cols="4" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let img of product.images">
-      <img [src]="img" alt="" (click)="showPreview(img)">
-    </mat-grid-tile>
-  </mat-grid-list>
-  </div>
-<mat-card-footer>
+<div fxLayout="column" fxLayoutAlign="center center">
+  <!-- <mat-progress-bar mode="indeterminate" *ngIf="true "></mat-progress-bar> -->
   <div>
-  <button mat-raised-button 
-    color="accent" 
-    style="float:initial;" 
-    (click)="chooseFile.click()"
-    [disabled]="selectedFileIndex < maxFileUploadCount ? false: true ">
-    Add your photos! ( Max 4 )
-  </button>
-  <input 
-    #chooseFile 
-    style="display:none;" 
-    type="file" 
-    accept="image/*,capture=camera" 
-    (change)="selectedFiles($event.target.files)">
+    <img 
+      *ngIf="product.previewImage" 
+      [src]="product.previewImage" 
+      alt="no_image" 
+      style="border-radius: 10px 10px 0 0; width: 100%; height: 200px">
+    <!-- <button mat-icon-button>delete</button> -->
+
+    <mat-grid-list cols="4" rowHeight="2:1">
+      <mat-grid-tile *ngFor="let img of product.images">
+        <img [src]="img" alt="" (click)="showPreview(img)">
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <div>
+    <button mat-raised-button color="accent" style="float:initial;" (click)="chooseFile.click()" [disabled]="selectedFileIndex < maxFileUploadCount ? false: true ">
+      Add your photos! ( Max 4 )
+    </button>
+    <input #chooseFile style="display:none;" type="file" accept="image/*,capture=camera" (change)="selectedFiles($event.target.files)">
+  </div>
+
 </div>
-</mat-card-footer>
-<!-- </mat-card> -->
